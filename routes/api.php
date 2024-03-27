@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +25,22 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [\App\Http\Controllers\Api\V1\HealthController::class, 'index']);
     });
 });
+
+Route::middleware('api')->prefix('auth')->group(
+    function (): void {
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('me', [AuthController::class, 'me']);
+    }
+);
+
+Route::prefix('v1')->group(
+    function (): void {
+        Route::prefix('user')->group(
+            function (): void {
+                Route::post('/register', [UserController::class, 'register']);
+            }
+        );
+    }
+);
