@@ -39,7 +39,7 @@ class SubCategory extends Model
 	const CATEGORY_ID = 'categoryId';
 	const CREATED_AT = 'createdAt';
 	const UPDATED_AT = 'updatedAt';
-	protected $table = 'subCategories';
+	protected $table = 'sub_categories';
 
 	protected $casts = [
 		self::ID => 'int',
