@@ -34,8 +34,8 @@ class Category extends Model
 	const IMAGE = 'image';
 	const ACTIVE = 'active';
 	const ORDER = 'order';
-	const CREATED_AT = 'createdAt';
-	const UPDATED_AT = 'updatedAt';
+	const CREATED_AT = 'created_at';
+	const UPDATED_AT = 'updated_at';
 	protected $table = 'categories';
 
 	protected $casts = [

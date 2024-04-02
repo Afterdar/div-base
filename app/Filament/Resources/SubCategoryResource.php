@@ -23,7 +23,20 @@ class SubCategoryResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'title')
+                    ->required(),
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->required(),
+                Forms\Components\Toggle::make('active')
+                    ->required(),
+                Forms\Components\TextInput::make('order')
+                    ->required()
+                    ->numeric(),
             ]);
     }
 
@@ -31,7 +44,25 @@ class SubCategoryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('category.title')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->searchable(),
+                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\IconColumn::make('active')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('order')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

@@ -37,10 +37,10 @@ class Product extends Model
 	const IMAGE = 'image';
 	const ACTIVE = 'active';
 	const ORDER = 'order';
-	const CATEGORY_ID = 'categoryId';
-	const SUB_CATEGORY_ID = 'subCategoryId';
-	const CREATED_AT = 'createdAt';
-	const UPDATED_AT = 'updatedAt';
+	const CATEGORY_ID = 'category_id';
+	const SUB_CATEGORY_ID = 'sub_category_id';
+	const CREATED_AT = 'created_at';
+	const UPDATED_AT = 'updated_at';
 	protected $table = 'products';
 
 	protected $casts = [

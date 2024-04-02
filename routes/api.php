@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\SubCategoryController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -40,6 +43,56 @@ Route::prefix('v1')->group(
         Route::prefix('user')->group(
             function (): void {
                 Route::post('/register', [UserController::class, 'register']);
+            }
+        );
+    }
+);
+
+Route::prefix('v1')->group(
+    function (): void {
+        Route::prefix('category')->group(
+            function (): void {
+                Route::get('/list', [CategoryController::class, 'getListCategory']);
+                Route::get('/{id}', [CategoryController::class, 'getCategoryById']);
+            }
+        );
+    }
+);
+
+Route::prefix('v1')->group(
+    function (): void {
+        Route::prefix('subCategory')->group(
+            function (): void {
+                Route::get('/list/{id}', [SubCategoryController::class, 'getListSubCategoriesByIdCategory']);
+                Route::get('/{id}', [SubCategoryController::class, 'getSubCategoryById']);
+            }
+        );
+    }
+);
+
+Route::prefix('v1')->group(
+    function (): void {
+        Route::prefix('product')->group(
+            function (): void {
+                Route::get('/list/{id}', [ProductController::class, 'getListProductSubCategoryById']);
+                Route::get('/{id}', [ProductController::class, 'getDetailProductById']);
+            }
+        );
+    }
+);
+
+Route::middleware('auth:api')->group(
+    function (): void
+    {
+        Route::prefix('v1')->group(
+            function (): void {
+                Route::prefix('favouritesProduct')->group(
+                    function (): void {
+                        Route::post('/add/{id}', [ProductController::class, 'addProductFavourites']);
+                        Route::post('/delete/{id}', [ProductController::class, 'deleteProductFavourites']);
+                        Route::get('/list', [ProductController::class, 'getListFavouritesProductsUser']);
+                    }
+                );
             }
         );
     }

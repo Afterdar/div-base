@@ -36,9 +36,9 @@ class SubCategory extends Model
 	const IMAGE = 'image';
 	const ACTIVE = 'active';
 	const ORDER = 'order';
-	const CATEGORY_ID = 'categoryId';
-	const CREATED_AT = 'createdAt';
-	const UPDATED_AT = 'updatedAt';
+	const CATEGORY_ID = 'category_id';
+	const CREATED_AT = 'created_at';
+	const UPDATED_AT = 'updated_at';
 	protected $table = 'sub_categories';
 
 	protected $casts = [
