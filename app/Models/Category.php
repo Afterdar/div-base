@@ -9,6 +9,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -16,14 +18,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id
  * @property string $title
- * @property string $image
- * @property bool $active
  * @property int $order
- * @property Carbon|null $createdAt
- * @property Carbon|null $updatedAt
+ * @property bool $active
+ * @property string $image
+ * @property int|null $parent_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
+ * @property Category|null $category
+ * @property Collection|Category[] $categories
  * @property Collection|Product[] $products
- * @property Collection|SubCategory[] $sub_categories
  *
  * @package App\Models
  */
@@ -31,35 +35,43 @@ class Category extends Model
 {
 	const ID = 'id';
 	const TITLE = 'title';
-	const IMAGE = 'image';
-	const ACTIVE = 'active';
 	const ORDER = 'order';
+	const ACTIVE = 'active';
+	const IMAGE = 'image';
+	const PARENT_ID = 'parent_id';
 	const CREATED_AT = 'created_at';
 	const UPDATED_AT = 'updated_at';
-	protected $table = 'categories';
+	protected $table = 'category';
 
 	protected $casts = [
 		self::ID => 'int',
-		self::ACTIVE => 'bool',
 		self::ORDER => 'int',
+		self::ACTIVE => 'bool',
+		self::PARENT_ID => 'int',
 		self::CREATED_AT => 'datetime',
 		self::UPDATED_AT => 'datetime'
 	];
 
 	protected $fillable = [
 		self::TITLE,
-		self::IMAGE,
+		self::ORDER,
 		self::ACTIVE,
-		self::ORDER
+		self::IMAGE,
+		self::PARENT_ID
 	];
 
-	public function products(): HasMany
+	public function parentCategory(): BelongsTo
 	{
-		return $this->hasMany(Product::class);
+		return $this->belongsTo(Category::class, Category::PARENT_ID);
 	}
 
-	public function sub_categories(): HasMany
+	public function subCategories(): HasMany
 	{
-		return $this->hasMany(SubCategory::class);
+		return $this->hasMany(Category::class, Category::PARENT_ID);
+	}
+
+	public function categoryProducts(): BelongsToMany
+	{
+		return $this->belongsToMany(Product::class);
 	}
 }

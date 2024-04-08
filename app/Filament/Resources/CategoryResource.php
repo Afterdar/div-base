@@ -19,21 +19,33 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $modelLabel = 'Категория';
+
+    protected static ?string $pluralLabel = 'Категории';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('parent_id')
+                    ->label('Родительская категория')
+                    ->numeric(),
                 Forms\Components\TextInput::make('title')
+                    ->label('Название')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('order')
+                    ->label('Порядок')
+                    ->required()
+                    ->numeric()
+                    ->default(0),
+                Forms\Components\Toggle::make('active')
+                    ->label('Активность')
+                    ->required(),
                 Forms\Components\FileUpload::make('image')
+                    ->label('Изображение')
                     ->image()
                     ->required(),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
-                Forms\Components\TextInput::make('order')
-                    ->required()
-                    ->numeric(),
             ]);
     }
 
@@ -41,19 +53,29 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('order')
+                Tables\Columns\TextColumn::make('parent_id')
+                    ->label('Родительская категория')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Название')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('order')
+                    ->label('Порядок')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('active')
+                    ->label('Активность')
+                    ->boolean(),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Изображение'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Дата создания')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

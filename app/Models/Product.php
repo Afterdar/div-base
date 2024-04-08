@@ -7,8 +7,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Product
@@ -19,13 +21,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $image
  * @property bool $active
  * @property int $order
- * @property int $categoryId
- * @property int $subCategoryId
- * @property Carbon|null $createdAt
- * @property Carbon|null $updatedAt
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property Category $category
- * @property SubCategory $subCategory
+ * @property Collection|Category[] $categories
  *
  * @package App\Models
  */
@@ -37,8 +36,6 @@ class Product extends Model
 	const IMAGE = 'image';
 	const ACTIVE = 'active';
 	const ORDER = 'order';
-	const CATEGORY_ID = 'category_id';
-	const SUB_CATEGORY_ID = 'sub_category_id';
 	const CREATED_AT = 'created_at';
 	const UPDATED_AT = 'updated_at';
 	protected $table = 'products';
@@ -48,8 +45,6 @@ class Product extends Model
 		self::PRICE => 'float',
 		self::ACTIVE => 'bool',
 		self::ORDER => 'int',
-		self::CATEGORY_ID => 'int',
-		self::SUB_CATEGORY_ID => 'int',
 		self::CREATED_AT => 'datetime',
 		self::UPDATED_AT => 'datetime'
 	];
@@ -59,18 +54,16 @@ class Product extends Model
 		self::PRICE,
 		self::IMAGE,
 		self::ACTIVE,
-		self::ORDER,
-		self::CATEGORY_ID,
-		self::SUB_CATEGORY_ID
+		self::ORDER
 	];
 
-	public function category(): BelongsTo
+	public function categories(): BelongsToMany
 	{
-		return $this->belongsTo(Category::class);
+		return $this->belongsToMany(Category::class);
 	}
 
-	public function sub_category(): BelongsTo
+	public function favouriteUsers(): BelongsToMany
 	{
-		return $this->belongsTo(SubCategory::class);
+        return $this->belongsToMany(User::class);
 	}
 }

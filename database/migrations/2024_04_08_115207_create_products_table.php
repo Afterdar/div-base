@@ -17,9 +17,7 @@ return new class extends Migration
             $table->float('price');
             $table->string('image');
             $table->boolean('active')->default(false);
-            $table->integer('order');
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
-            $table->foreignId('sub_category_id')->constrained('sub_categories')->cascadeOnDelete();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

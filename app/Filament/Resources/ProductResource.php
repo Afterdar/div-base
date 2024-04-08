@@ -19,31 +19,35 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $modelLabel = 'Товар';
+
+    protected static ?string $pluralLabel = 'Товары';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'title')
-                    ->required(),
-                Forms\Components\Select::make('sub_category_id')
-                    ->relationship('sub_category', 'title')
-                    ->required(),
                 Forms\Components\TextInput::make('title')
+                    ->label('Название')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('price')
+                    ->label('Цена')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('P'),
                 Forms\Components\FileUpload::make('image')
+                    ->label('Изображение')
                     ->image()
                     ->required(),
                 Forms\Components\Toggle::make('active')
+                    ->label('Активность')
                     ->required(),
                 Forms\Components\TextInput::make('order')
+                    ->label('Порядок')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->default(0),
             ]);
     }
 
@@ -51,28 +55,29 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('category.title')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sub_category.title')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('title')
+                    ->label('Название')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
+                    ->label('Цена')
                     ->money()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Изображение'),
                 Tables\Columns\IconColumn::make('active')
+                    ->label('Активность')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('order')
+                    ->label('Порядок')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Дата создания')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
