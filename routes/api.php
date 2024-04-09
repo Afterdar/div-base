@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\CategoriesController;
+use App\Http\Controllers\Api\V1\ProductsController;
 use App\Http\Controllers\Api\V1\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +46,25 @@ Route::prefix('/v1')->group(function () {
         Route::get('/verify-email/{id}/{hash}', [UsersController::class, 'verifyEmail'])
             ->middleware(['signed'])
             ->name('verification.verify');
+    });
+});
 
+Route::prefix('/v1')->group(function () {
+    Route::prefix('/categories')->group(function () {
+        Route::get('/list', [CategoriesController::class, 'getListCategories']);
+    });
+});
+
+Route::prefix('/v1')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::prefix('/products')->group(function () {
+            Route::get('/{id}', [ProductsController::class, 'getProductById']);
+            Route::get('/list/{id}', [ProductsController::class, 'getProductsListCategory']);
+        });
+
+        Route::prefix('/favourite')->group(function () {
+            Route::post('/add/{id}', [ProductsController::class, 'addProductFavorite']);
+            Route::post('/delete/{id}', [ProductsController::class, 'deleteProductFavorite']);
+        });
     });
 });
