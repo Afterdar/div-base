@@ -7,8 +7,8 @@ use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
 #[Schema(
-    schema: "UserRegisterDTO",
-    title: 'UserRegisterDTO',
+    schema: "UserLoginDTO",
+    title: 'UserLoginDTO',
     required: ['password', 'name'],
     properties: [
         new Property(property: 'email', type: 'string'),

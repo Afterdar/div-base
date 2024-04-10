@@ -54,14 +54,15 @@ Route::prefix('/v1')->group(function () {
         Route::get('/list', [CategoriesController::class, 'getListCategories']);
     });
 });
+Route::prefix('/v1')->group(function () {
+    Route::prefix('/products')->group(function () {
+        Route::get('/{id}', [ProductsController::class, 'getProductById']);
+        Route::get('/category/list/{id}', [ProductsController::class, 'getProductsListCategory']);
+    });
+});
 
 Route::prefix('/v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
-        Route::prefix('/products')->group(function () {
-            Route::get('/{id}', [ProductsController::class, 'getProductById']);
-            Route::get('/list/{id}', [ProductsController::class, 'getProductsListCategory']);
-        });
-
         Route::prefix('/favourite')->group(function () {
             Route::post('/add/{id}', [ProductsController::class, 'addProductFavorite']);
             Route::post('/delete/{id}', [ProductsController::class, 'deleteProductFavorite']);

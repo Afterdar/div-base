@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
@@ -15,7 +16,7 @@ use OpenApi\Attributes\Schema;
         new Property(property: 'title', type: 'string'),
         new Property(property: 'order', type: 'integer'),
         new Property(property: 'active', type: 'boolean'),
-        new Property(property: 'image', type: 'integer'),
+        new Property(property: 'image', type: 'array', items: new Items(type: 'string')),
         new Property(property: 'parentId', type: 'integer', nullable: true),
         new Property(property: 'updatedAt', type: 'string', format: 'date-time'),
         new Property(property: 'createdAt', type: 'string', format: 'date-time'),

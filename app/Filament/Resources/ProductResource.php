@@ -35,9 +35,11 @@ class ProductResource extends Resource
                     ->label('Цена')
                     ->required()
                     ->numeric()
-                    ->prefix('P'),
+                    ->prefix('₽')
+                    ->suffix('В рублях'),
                 Forms\Components\FileUpload::make('image')
                     ->label('Изображение')
+                    ->multiple()
                     ->image()
                     ->required(),
                 Forms\Components\Toggle::make('active')
@@ -60,7 +62,7 @@ class ProductResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Цена')
-                    ->money()
+                    ->suffix('₽')
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Изображение'),

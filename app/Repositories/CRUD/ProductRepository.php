@@ -8,6 +8,7 @@ use App\Repositories\CRUD\Common\BaseCRUDRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductRepository extends BaseCRUDRepository
@@ -29,9 +30,9 @@ class ProductRepository extends BaseCRUDRepository
 
     public function getListProductsCategory(int $id, PaginationDTO $dto): LengthAwarePaginator
     {
-        return  $this->getModelsQB()
-            ->join('category_products', 'products.id', '=', 'category_products.category_id')
-            ->where('category_id' , '=', $id)
+        return $this->getModelsQB()
+            ->join('category_products', 'products.id' , '=', 'category_products.product_id')
+            ->where('category_products.category_id', '=', $id)
             ->paginate($dto->perPage, ['*'], 'page', $dto->page);
     }
 

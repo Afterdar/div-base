@@ -8,8 +8,8 @@ use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
 #[Schema(
-    schema: "UserDTOResource",
-    title: 'UserDTOResource',
+    schema: "UserRegisterResource",
+    title: 'UserRegisterResource',
     properties: [
         new Property(property: 'user', ref: '#/components/schemas/UserResource'),
         new Property(property: 'token', type: 'string'),

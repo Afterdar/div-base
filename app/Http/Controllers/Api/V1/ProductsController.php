@@ -9,7 +9,6 @@ use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Attributes as OAT;
 
 class ProductsController extends BaseController
@@ -24,9 +23,6 @@ class ProductsController extends BaseController
     #[OAT\Get(
         path: "/api/v1/products/{id}",
         description: "Получить продукт по id",
-        security: [
-            ["sanctum" => []],
-        ],
         tags: ["Каталог"],
         parameters: [
             new OAT\Parameter(name: 'id', in: 'path'),
@@ -56,11 +52,8 @@ class ProductsController extends BaseController
     }
 
     #[OAT\Get(
-        path: "api/v1/products/list/{id}",
+        path: "/api/v1/products/category/list/{id}",
         description: "Получить продукты категории",
-        security: [
-            ["sanctum" => []],
-        ],
         tags: ["Каталог"],
         parameters: [
             new OAT\Parameter(name: 'id', in: 'path'),
@@ -74,7 +67,7 @@ class ProductsController extends BaseController
                 content: new OAT\JsonContent(
                     allOf: [
                         new OAT\Schema(
-                            ref: '#/components/schemas/Pagination'
+                            ref: '#/components/schemas/PaginationDTO'
                         ),
                         new OAT\Schema(
                             properties: [
@@ -100,7 +93,7 @@ class ProductsController extends BaseController
      * @throws \Exception
      */
     #[OAT\Post(
-        path: "api/v1/favourite/add/{id}",
+        path: "/api/v1/favourite/add/{id}",
         description: "Добавить в избранное",
         security: [
             ["sanctum" => []]
@@ -132,7 +125,7 @@ class ProductsController extends BaseController
     }
 
     #[OAT\Post(
-        path: "api/v1/favourite/delete/{id}",
+        path: "/api/v1/favourite/delete/{id}",
         description: "Удалить из избранного",
         security: [
             ["sanctum" => []]

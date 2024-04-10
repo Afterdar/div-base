@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Category extends Model
 {
+    use HasFactory;
+
 	const ID = 'id';
 	const TITLE = 'title';
 	const ORDER = 'order';
@@ -47,6 +50,7 @@ class Category extends Model
 		self::ID => 'int',
 		self::ORDER => 'int',
 		self::ACTIVE => 'bool',
+        self::IMAGE => 'array',
 		self::PARENT_ID => 'int',
 		self::CREATED_AT => 'datetime',
 		self::UPDATED_AT => 'datetime'
@@ -72,6 +76,6 @@ class Category extends Model
 
 	public function categoryProducts(): BelongsToMany
 	{
-		return $this->belongsToMany(Product::class);
+		return $this->belongsToMany(Product::class, 'category_products', 'category_id', 'product_id');
 	}
 }

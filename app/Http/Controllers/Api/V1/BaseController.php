@@ -9,9 +9,18 @@ use OpenApi\Attributes as OAT;
 #[OAT\OpenApi(
     info: new OAT\Info(
         version: "1.0",
-        description: 'Документация',
-        title: "Api"
+        description: 'Документация к проекту base-project',
+        title: "Api",
     ),
+    security: [
+        new OAT\SecurityScheme(
+            securityScheme: 'sanctum',
+            type: "apiKey",
+            name: "Authorization",
+            in: 'header',
+            scheme: 'bearerAuth'
+        )
+    ]
 )]
 class BaseController extends Controller
 {

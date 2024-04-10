@@ -45,7 +45,8 @@ class CategoryResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->label('Изображение')
                     ->image()
-                    ->required(),
+                    ->required()
+                    ->multiple(),
             ]);
     }
 
