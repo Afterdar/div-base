@@ -48,7 +48,10 @@ class UsersController extends BaseController
         $register = $this->userService->registerUser($dto);
 
         if ($register->isError) {
-            return response()->json($register->errors);
+            return $this->errorResponse(
+                message: $register->message,
+                status: $register->status
+            );
         }
 
         return new UserRegisterResource($register->data);
@@ -80,7 +83,10 @@ class UsersController extends BaseController
         $login = $this->userService->loginUser($dto);
 
         if ($login->isError) {
-            return response()->json($login->errors);
+            return $this->errorResponse(
+                message: $login->message,
+                status: $login->status
+            );
         }
 
         return new UserLoginResource($login->data);
@@ -107,7 +113,10 @@ class UsersController extends BaseController
         $result = $this->userService->sendVerifyEmail($user);
 
         if ($result->isError) {
-            return response()->json($result->errors);
+            return $this->errorResponse(
+                message: $result->message,
+                status: $result->status
+            );
         }
 
         return response()->json($result->data);
@@ -133,7 +142,10 @@ class UsersController extends BaseController
         $result = $this->userService->verifyUser($id);
 
         if ($result->isError) {
-            return response()->json($result->errors);
+            return $this->errorResponse(
+                message: $result->message,
+                status: $result->status
+            );
         }
 
         return response()->json($result->data);

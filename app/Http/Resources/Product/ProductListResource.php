@@ -35,6 +35,7 @@ class ProductListResource extends JsonResource
     {
         $user = auth('sanctum')->user();
         $isFavorite = false;
+        $resultImage = [];
 
         if ($user)
         {
@@ -49,11 +50,16 @@ class ProductListResource extends JsonResource
             }
         }
 
+        foreach ($this->image as $image)
+        {
+            $resultImage[] = asset('storage/' . $image);
+        }
+
         return [
             "id" => $this->id,
             "title" => $this->title,
             "price" => $this->price,
-            "image" => $this->image,
+            "image" => $resultImage,
             "active" => $this->active,
             "order" => $this->order,
             "createdAt" => $this->created_at,

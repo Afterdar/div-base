@@ -50,7 +50,7 @@ class Category extends Model
 		self::ID => 'int',
 		self::ORDER => 'int',
 		self::ACTIVE => 'bool',
-        self::IMAGE => 'array',
+        self::IMAGE => 'json',
 		self::PARENT_ID => 'int',
 		self::CREATED_AT => 'datetime',
 		self::UPDATED_AT => 'datetime'

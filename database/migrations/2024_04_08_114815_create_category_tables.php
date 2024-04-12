@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->integer('order')->default(0);
             $table->boolean('active')->default(false);
-            $table->string('image');
+            $table->json('image');
             $table->foreignId('parent_id')->index()->nullable()->constrained('category')->restrictOnDelete();
             $table->timestamps();
         });

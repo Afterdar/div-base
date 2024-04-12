@@ -50,7 +50,10 @@ class ProductsController extends BaseController
         $product = $this->productService->getProductById($id);
 
         if ($product->isError) {
-            return response()->json($product->errors);
+            return $this->errorResponse(
+                message: $product->message,
+                status: $product->status
+            );
         }
 
         return new ProductResource($product->data);
@@ -85,7 +88,10 @@ class ProductsController extends BaseController
         $addProductFavoriteList = $this->productService->addProductFavoriteList($id, $user);
 
         if ($addProductFavoriteList->isError) {
-            return response()->json($addProductFavoriteList->errors);
+            return $this->errorResponse(
+                message: $addProductFavoriteList->message,
+                status: $addProductFavoriteList->status
+            );
         }
 
         return response()->json('Товар добавлен в избраное');
@@ -116,7 +122,10 @@ class ProductsController extends BaseController
         $deleteProductFavoriteList = $this->productService->deleteProductFavoriteList($id, $user);
 
         if ($deleteProductFavoriteList->isError) {
-            return response()->json($deleteProductFavoriteList->errors);
+            return $this->errorResponse(
+                message: $deleteProductFavoriteList->message,
+                status: $deleteProductFavoriteList->status
+            );
         }
 
         return response()->json('Товар удален из избраного');

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->float('price');
-            $table->string('image');
+            $table->json('image');
             $table->boolean('active')->default(false);
             $table->integer('order')->default(0);
             $table->timestamps();

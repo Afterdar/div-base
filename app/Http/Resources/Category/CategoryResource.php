@@ -32,12 +32,19 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $resultImage = [];
+
+        foreach ($this->image as $image)
+        {
+            $resultImage[] = asset('storage/' . $image);
+        }
+
         return [
             "id" => $this->id,
             "title" => $this->title,
             "order" => $this->order,
             "active" => $this->active,
-            "image" => $this->image,
+            "image" => $resultImage,
             "parentId" => $this->parent_id,
             "createdAt" => $this->created_at,
             "updatedAt" => $this->updated_at,

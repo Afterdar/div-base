@@ -31,11 +31,18 @@ class ProductFavoriteListResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $resultImage = [];
+
+        foreach ($this->image as $image)
+        {
+            $resultImage[] = asset('storage/' . $image);
+        }
+
         return [
             "id" => $this->id,
             "title" => $this->title,
             "price" => $this->price,
-            "image" => $this->image,
+            "image" => $resultImage,
             "active" => $this->active,
             "order" => $this->order,
             "createdAt" => $this->created_at,

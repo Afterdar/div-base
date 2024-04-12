@@ -47,7 +47,7 @@ class Product extends Model
 	protected $casts = [
 		self::ID => 'int',
 		self::PRICE => 'float',
-        self::IMAGE => 'array',
+        self::IMAGE => 'json',
 		self::ACTIVE => 'bool',
 		self::ORDER => 'int',
 		self::CREATED_AT => 'datetime',

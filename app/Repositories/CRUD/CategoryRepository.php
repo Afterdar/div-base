@@ -25,12 +25,18 @@ class CategoryRepository extends BaseCRUDRepository
             ->paginate($dto->perPage, ['*'], 'page', $dto->page);
     }
 
-    public function getListProductsCategory(int $id, PaginationDTO $dto, ?User $user): LengthAwarePaginator
+    public function getListProductsCategory(int $id, PaginationDTO $dto, ?User $user): ?LengthAwarePaginator
     {
         $category = $this->getModelsQB()
             ->where('id', '=', $id)
-            ->first()
-            ->categoryProducts();
+            ->first();
+
+        if (!$category)
+        {
+            return null;
+        }
+
+        $category->categoryProducts();
 
         return $category->paginate($dto->perPage, ['*'], 'page', $dto->page);
     }

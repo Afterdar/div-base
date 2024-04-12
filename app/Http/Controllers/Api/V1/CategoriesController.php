@@ -8,6 +8,7 @@ use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Product\ProductListResource;
 use App\Repositories\CRUD\CategoryRepository;
 use App\Services\CategoryService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -82,13 +83,20 @@ class CategoriesController extends BaseController
             )
         ]
     )]
-    public function getProductsListCategory(int $id, PaginationRequest $paginationRequest): JsonResource
+    public function getProductsListCategory(int $id, PaginationRequest $paginationRequest): JsonResponse|JsonResource
     {
         $user = auth('sanctum')->user();
 
         $dto = PaginationDTO::fillAttributes($paginationRequest->validated());
 
         $listProducts = $this->categoryService->getListCategoryProducts($id, $dto, $user);
+
+        if ($listProducts->isError) {
+            return $this->errorResponse(
+                message: $listProducts->message,
+                status: $listProducts->status
+            );
+        }
 
         return ProductListResource::collection($listProducts->data);
     }
