@@ -6,22 +6,25 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use OpenApi\Attributes as OAT;
 
-#[OAT\OpenApi(
-    info: new OAT\Info(
-        version: "1.0",
-        description: 'Документация к проекту base-project',
-        title: "Api",
-    ),
-    security: [
-        new OAT\SecurityScheme(
-            securityScheme: 'sanctum',
-            type: "apiKey",
-            name: "Authorization",
-            in: 'header',
-            scheme: 'bearerAuth'
-        )
-    ]
-)]
+/**
+ * @OA\Swagger(
+ *      schemes={"http"},
+ *      basePath="/api/v1",
+ *      @OA\Info(
+ *          title="Div-base",
+ *          version="1.0.0",
+ *      ),
+ *      @OA\PathItem(path="/api")
+ *
+ *     @OA\Compontents(
+ *          @OA\SecurityScheme(
+ *              securityScheme="bearerAuth",
+ *              type="http",
+ *              scheme="bearer"
+ *          )
+ *      )
+ * )
+ */
 class BaseController extends Controller
 {
     public function errorResponse(

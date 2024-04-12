@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -8,10 +8,9 @@ use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
-
 #[Schema(
-    schema: "ProductListResource",
-    title: 'ProductListResource',
+    schema: "ProductResource",
+    title: 'ProductResource',
     properties: [
         new Property(property: 'id', type: 'integer'),
         new Property(property: 'title', type: 'string'),
@@ -21,11 +20,11 @@ use OpenApi\Attributes\Schema;
         new Property(property: 'order', type: 'integer'),
         new Property(property: 'updatedAt', type: 'string', format: 'date-time'),
         new Property(property: 'createdAt', type: 'string', format: 'date-time'),
-        new Property(property: 'productId', type: 'integer'),
-        new Property(property: 'categoryId', type: 'integer'),
+        new Property(property: 'isFavorite', type: 'bool'),
     ]
 )]
-class ProductListResource extends JsonResource
+
+class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -34,6 +33,19 @@ class ProductListResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = auth('sanctum')->user();
+        $isFavorite = false;
+
+        if ($user)
+        {
+            $favoriteProductsUser = $user->favoritesProducts->toArray();
+
+            foreach ($favoriteProductsUser as $item)
+            {
+                $isFavorite = $item['id'] === $this->id;
+            }
+        }
+
         return [
             "id" => $this->id,
             "title" => $this->title,
@@ -43,8 +55,7 @@ class ProductListResource extends JsonResource
             "order" => $this->order,
             "createdAt" => $this->created_at,
             "updatedAt" => $this->updated_at,
-            "productId" => $this->product_id,
-            "categoryId" => $this->category_id,
+            "isFavorite" => $isFavorite,
         ];
     }
 }

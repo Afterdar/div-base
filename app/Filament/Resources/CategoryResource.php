@@ -27,9 +27,9 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('parent_id')
+                Forms\Components\Select::make('parent_id')
                     ->label('Родительская категория')
-                    ->numeric(),
+                    ->relationship('parentCategory', 'title'),
                 Forms\Components\TextInput::make('title')
                     ->label('Название')
                     ->required()
@@ -56,7 +56,7 @@ class CategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('parent_id')
                     ->label('Родительская категория')
-                    ->numeric()
+                    ->state(fn(Category $category) => $category->parentCategory?->title)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Название')

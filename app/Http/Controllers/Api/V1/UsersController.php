@@ -6,8 +6,8 @@ use App\DTO\Users\UserLoginDTO;
 use App\DTO\Users\UserRegisterDTO;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
-use App\Http\Resources\UserRegisterResource;
-use App\Http\Resources\UserLoginResource;
+use App\Http\Resources\User\UserLoginResource;
+use App\Http\Resources\User\UserRegisterResource;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -90,7 +90,7 @@ class UsersController extends BaseController
         path: "/api/v1/user/send-verify-email",
         description: "Отправка письма для подтверждения",
         security: [
-            ["sanctum" => []]
+            ["bearerAuth" => []]
         ],
         tags: ["Авторизация"],
         responses: [
@@ -116,6 +116,9 @@ class UsersController extends BaseController
     #[OAT\Get(
         path: "/api/v1/user/verify-email/{id}/{hash}",
         description: "Подтверждение почты",
+        security: [
+            ["bearerAuth" => []]
+        ],
         tags: ["Авторизация"],
         parameters: [
             new OAT\Parameter(name: 'id', in: 'path'),

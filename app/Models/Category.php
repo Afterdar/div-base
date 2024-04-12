@@ -64,6 +64,10 @@ class Category extends Model
 		self::PARENT_ID
 	];
 
+    protected $attributes = [
+      self::ACTIVE => false,
+    ];
+
 	public function parentCategory(): BelongsTo
 	{
 		return $this->belongsTo(Category::class, Category::PARENT_ID);

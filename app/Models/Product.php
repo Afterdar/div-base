@@ -41,6 +41,7 @@ class Product extends Model
 	const ORDER = 'order';
 	const CREATED_AT = 'created_at';
 	const UPDATED_AT = 'updated_at';
+
 	protected $table = 'products';
 
 	protected $casts = [
@@ -63,7 +64,7 @@ class Product extends Model
 
 	public function categories(): BelongsToMany
 	{
-		return $this->belongsToMany(Category::class);
+		return $this->belongsToMany(Category::class, 'category_products', 'product_id', 'category_id');
 	}
 
 	public function favouriteUsers(): BelongsToMany

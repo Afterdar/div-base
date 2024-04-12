@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\DTO\Pagination\PaginationDTO;
 use App\Http\Requests\PaginationRequest;
-use App\Http\Resources\ProductListResource;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\Product\ProductFavoriteListResource;
+use App\Http\Resources\Product\ProductListResource;
+use App\Http\Resources\Product\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Attributes as OAT;
 
 class ProductsController extends BaseController
@@ -23,6 +26,9 @@ class ProductsController extends BaseController
     #[OAT\Get(
         path: "/api/v1/products/{id}",
         description: "Получить продукт по id",
+        security: [
+            ["bearerAuth" => []]
+        ],
         tags: ["Каталог"],
         parameters: [
             new OAT\Parameter(name: 'id', in: 'path'),
@@ -39,7 +45,6 @@ class ProductsController extends BaseController
             )
         ]
     )]
-
     public function getProductById(int $id): ProductResource|JsonResponse
     {
         $product = $this->productService->getProductById($id);
@@ -51,43 +56,6 @@ class ProductsController extends BaseController
         return new ProductResource($product->data);
     }
 
-    #[OAT\Get(
-        path: "/api/v1/products/category/list/{id}",
-        description: "Получить продукты категории",
-        tags: ["Каталог"],
-        parameters: [
-            new OAT\Parameter(name: 'id', in: 'path'),
-            new OAT\Parameter(name: 'page', in: 'query', required: false, schema: new OAT\Schema(type: 'integer', default: 1)),
-            new OAT\Parameter(name: 'perPage', in: 'query', required: false, schema: new OAT\Schema(type: 'integer')),
-        ],
-        responses: [
-            new OAT\Response(
-                response: 200,
-                description: 'OK',
-                content: new OAT\JsonContent(
-                    allOf: [
-                        new OAT\Schema(
-                            ref: '#/components/schemas/PaginationDTO'
-                        ),
-                        new OAT\Schema(
-                            properties: [
-                                new OAT\Property(property: 'data', type: 'array', items: new OAT\Items(ref: '#/components/schemas/ProductListResource'))
-                            ],
-                        ),
-                    ]
-                ),
-            )
-        ]
-    )]
-
-    public function getProductsListCategory(int $id, PaginationRequest $paginationRequest): AnonymousResourceCollection
-    {
-        $dto = PaginationDTO::fillAttributes($paginationRequest->validated());
-
-        $listProducts = $this->productService->getListProductsCategory($id, $dto);
-
-        return ProductListResource::collection($listProducts->data);
-    }
 
     /**
      * @throws \Exception
@@ -96,7 +64,7 @@ class ProductsController extends BaseController
         path: "/api/v1/favourite/add/{id}",
         description: "Добавить в избранное",
         security: [
-            ["sanctum" => []]
+            ["bearerAuth" => []]
         ],
         tags: ["Каталог"],
         parameters: [
@@ -110,10 +78,9 @@ class ProductsController extends BaseController
             )
         ]
     )]
-
-    public function addProductFavorite(int $id): JsonResponse
+    public function addProductFavorite(int $id, Request $request): JsonResponse
     {
-        $user = Auth()->user();
+        $user = $request->user();
 
         $addProductFavoriteList = $this->productService->addProductFavoriteList($id, $user);
 
@@ -128,7 +95,7 @@ class ProductsController extends BaseController
         path: "/api/v1/favourite/delete/{id}",
         description: "Удалить из избранного",
         security: [
-            ["sanctum" => []]
+            ["bearerAuth" => []]
         ],
         tags: ["Каталог"],
         parameters: [
@@ -142,10 +109,9 @@ class ProductsController extends BaseController
             )
         ]
     )]
-
-    public function deleteProductFavorite(int $id): JsonResponse
+    public function deleteProductFavorite(int $id, Request $request): JsonResponse
     {
-        $user = Auth()->user();
+        $user = $request->user();
 
         $deleteProductFavoriteList = $this->productService->deleteProductFavoriteList($id, $user);
 
@@ -154,5 +120,37 @@ class ProductsController extends BaseController
         }
 
         return response()->json('Товар удален из избраного');
+    }
+
+    #[OAT\Get(
+        path: "/api/v1/favourite/list",
+        description: "Получить список избранных товаров пользователя",
+        security: [
+            ["bearerAuth" => []]
+        ],
+        tags: ["Каталог"],
+
+        responses: [
+            new OAT\Response(
+                response: 200,
+                description: 'OK',
+                content: new OAT\JsonContent(
+
+                    properties: [
+                        new OAT\Property(property: 'data', type: 'array', items: new OAT\Items(ref: '#/components/schemas/ProductFavoriteListResource'))
+                    ],
+
+                ),
+            )
+        ]
+    )]
+    public function listFavoriteProducts(Request $request, PaginationRequest $paginationRequest): JsonResource
+    {
+        $user = $request->user();
+        $dto = PaginationDTO::fillAttributes($paginationRequest->validated());
+
+        $listFavoriteProducts = $this->productService->getListFavoriteProducts($user, $dto);
+
+        return ProductFavoriteListResource::collection($listFavoriteProducts->data);
     }
 }

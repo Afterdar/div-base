@@ -4,6 +4,7 @@ namespace App\Repositories\CRUD;
 
 use App\DTO\Pagination\PaginationDTO;
 use App\Models\Product;
+use App\Models\User;
 use App\Repositories\CRUD\Common\BaseCRUDRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -24,7 +25,6 @@ class ProductRepository extends BaseCRUDRepository
         return $this->getModelsQB()
             ->where('id', '=', $id)
             ->where('active', '=', true)
-            ->orderByDesc('order')
             ->first();
     }
 
@@ -36,7 +36,7 @@ class ProductRepository extends BaseCRUDRepository
             ->paginate($dto->perPage, ['*'], 'page', $dto->page);
     }
 
-    public function addProductFavoriteList(int $id, ?Authenticatable $user): \Exception|null
+    public function addProductFavoriteList(int $id, User $user): \Exception|bool
     {
         $product = $this->getModelsQB()
             ->where('id', '=', $id)
@@ -59,10 +59,12 @@ class ProductRepository extends BaseCRUDRepository
             throw new \Exception('Товар уже добавлен в избраное');
         }
 
-        return $user->favoritesProducts()->attach($product->id);
+        $user->favoritesProducts()->attach($product->id);
+
+        return true;
     }
 
-    public function deleteProductFavoriteList(int $id, ?Authenticatable $user): \Exception|int
+    public function deleteProductFavoriteList(int $id, User $user): \Exception|bool
     {
         $productFavorite = $this->getModelsQB()
             ->join('favorite_products', 'product_id', '=', 'favorite_products.product_id')
@@ -75,6 +77,13 @@ class ProductRepository extends BaseCRUDRepository
             throw new \Exception('Товар не найден');
         }
 
-        return $user->favoritesProducts()->detach($id);
+        $user->favoritesProducts()->detach($id);
+
+        return true;
+    }
+
+    public function listFavoriteProducts(User $user, PaginationDTO $dto): LengthAwarePaginator
+    {
+        return $user->favoritesProducts()->paginate($dto->perPage, ['*'], 'page', $dto->page);
     }
 }

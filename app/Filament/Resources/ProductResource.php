@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -50,6 +51,12 @@ class ProductResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0),
+
+                Forms\Components\Select::make('category_id')
+                    ->multiple()
+                    ->relationship('categories', 'title')
+                    ->preload()
+                    ->label(trans('Категории'))
             ]);
     }
 
@@ -83,6 +90,9 @@ class ProductResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('categories.title')
+                    ->label('Категории')
             ])
             ->filters([
                 //

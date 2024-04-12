@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -8,14 +8,14 @@ use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
 #[Schema(
-    schema: "UserLoginResource",
-    title: 'UserLoginResource',
+    schema: "UserRegisterResource",
+    title: 'UserRegisterResource',
     properties: [
         new Property(property: 'user', ref: '#/components/schemas/UserResource'),
         new Property(property: 'token', type: 'string'),
     ]
 )]
-class UserLoginResource extends JsonResource
+class UserRegisterResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
