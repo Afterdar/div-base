@@ -26,22 +26,6 @@ class CategoryService
             return ServiceResult::createErrorResult('Категория не найдена', status: 404);
         }
 
-//        $resultListProducts = [];
-//
-//        foreach ($listProducts as $product)
-//        {
-//            $test = $product->toArray();
-//
-//            foreach ($test['image'] as $image)
-//            {
-//                $test['image'][] =  asset('storage/' . $image);
-//            }
-//
-//            $resultListProducts[] = $test;
-//        }
-//
-//        dd($resultListProducts);
-
         return ServiceResult::createSuccessResult($listProducts);
     }
 
